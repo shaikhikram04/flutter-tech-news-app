@@ -24,3 +24,28 @@ class ModifiedText extends StatelessWidget {
     );
   }
 }
+
+class BoldText extends StatelessWidget {
+  const BoldText({
+    super.key,
+    required this.text,
+    required this.size,
+    required this.color,
+  });
+
+  final String text;
+  final double size;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: GoogleFonts.lato(
+        color: color,
+        fontSize: size,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+}
