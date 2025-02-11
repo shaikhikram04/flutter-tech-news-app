@@ -35,12 +35,19 @@ class _HomeState extends State<Home> {
             child: SizedBox(
               width: w,
               child: FutureBuilder(
-                future: news,
+                future: fetchNews(),
                 builder: (context, snapshot) {
                   return ListView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      if (snapshot.hasData) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: AppColor.primary,
+                          ),
+                        );
+                      }
+                      if (snapshot.hasData && snapshot.data != null) {
                         final data = snapshot.data![index];
                         return NewsBox(
                           imageUrl: data['urlToImage'] ?? Constants.imageUrl,
