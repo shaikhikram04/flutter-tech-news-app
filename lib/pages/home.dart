@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tech_news/backend/functions.dart';
 import 'package:tech_news/components/appbar.dart';
 import 'package:tech_news/components/news_box.dart';
+import 'package:tech_news/components/search_bar.dart' as search;
 import 'package:tech_news/utils/colors.dart';
 import 'package:tech_news/utils/constants.dart';
 
@@ -18,6 +19,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
     news = fetchNews();
   }
 
@@ -30,43 +32,36 @@ class _HomeState extends State<Home> {
       appBar: Appbar(),
       body: Column(
         children: [
-          SearchBar(),
+          search.SearchBar(),
           Expanded(
             child: SizedBox(
               width: w,
               child: FutureBuilder(
                 future: fetchNews(),
                 builder: (context, snapshot) {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: AppColor.primary,
-                          ),
-                        );
-                      }
-                      if (snapshot.hasData && snapshot.data != null) {
-                        final data = snapshot.data![index];
-                        return NewsBox(
-                          imageUrl: data['urlToImage'] ?? Constants.imageUrl,
-                          title: data['title'],
-                          description: data['description'],
-                          url: data['url'],
-                          time: data['publishedAt'],
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text("Error: ${snapshot.error}");
-                      }
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return NewsBox(
+                            url: snapshot.data![index]['url'],
+                            imageUrl: snapshot.data![index]['urlToImage'] ??
+                                Constants.imageUrl,
+                            title: snapshot.data![index]['title'],
+                            time: snapshot.data![index]['publishedAt'],
+                            description:
+                                snapshot.data![index]['description'].toString(),
+                          );
+                        });
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
 
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.primary,
-                        ),
-                      );
-                    },
-                  );
+                  // By default, show a loading spinner.
+                  return Center(
+                      child: CircularProgressIndicator(
+                    color: AppColor.primary,
+                  ));
                 },
               ),
             ),
