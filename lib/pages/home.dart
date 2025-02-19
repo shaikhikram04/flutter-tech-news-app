@@ -23,6 +23,10 @@ class _HomeState extends State<Home> {
     news = fetchNews();
   }
 
+  void onSearch() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -32,7 +36,7 @@ class _HomeState extends State<Home> {
       appBar: Appbar(),
       body: Column(
         children: [
-          search.SearchBar(),
+          search.SearchBar(onSearch: onSearch),
           Expanded(
             child: SizedBox(
               width: w,
