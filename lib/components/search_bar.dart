@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tech_news/backend/functions.dart';
 import 'package:tech_news/utils/colors.dart';
 
 class SearchBar extends StatelessWidget {
